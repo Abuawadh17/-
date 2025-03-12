@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقع تقييم المسلسلات</title>
+    <script>
+        function saveData() {
+            var title = document.getElementById("title").value;
+            var rating = document.getElementById("rating").value;
+            var notes = document.getElementById("notes").value;
+
+            var reviews = JSON.parse(localStorage.getItem("reviews")) || [];
+            reviews.push({title: title, rating: rating, notes: notes});
+            localStorage.setItem("reviews", JSON.stringify(reviews));
+
+            displayReviews();
+        }
+
+        function displayReviews() {
+            var reviews = JSON.parse(localStorage.getItem("reviews")) || [];
+            var reviewsList = document.getElementById("reviewsList");
+            reviewsList.innerHTML = "";
+            reviews.forEach(function(review) {
+                reviewsList.innerHTML += "<p>" + review.title + " - " + review.rating + " - " + review.notes + "</p>";
+            });
+        }
+
+        window.onload = displayReviews;
+    </script>
+</head>
+<body>
+    <h1>موقع تقييم المسلسلات والأفلام</h1>
+
+    <h2>أضف مسلسل أو فيلم</h2>
+    <form onsubmit="event.preventDefault(); saveData();">
+        <label for="title">اسم المسلسل أو الفيلم:</label><br>
+        <input type="text" id="title" name="title" required><br><br>
+
+        <label for="rating">التقييم من 1 إلى 10:</label><br>
+        <input type="number" id="rating" name="rating" min="1" max="10" required><br><br>
+
+        <label for="notes">ملاحظاتك:</label><br>
+        <textarea id="notes" name="notes"></textarea><br><br>
+
+        <button type="submit">إرسال</button>
+    </form>
+
+    <h2>التقييمات السابقة:</h2>
+    <div id="reviewsList"></div>
+</body>
+</html>
